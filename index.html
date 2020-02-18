@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<style>
+    body {
+        background-color: black;
+        height: 100vh;
+        min-height: 100vh;
+    }
+
+    #panel {
+        height: 100vh;
+        background-color: aqua;
+    }
+
+    #question {
+        width: 80%;
+        height: 100px;
+        color: whitesmoke;
+        font-size: 300%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        margin: auto;
+
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <div id='panel'> -->
+    <div id='question' align="center"></div>
+    <!-- </div> -->
+</body>
+<script src='test.js'>
+</script>
+<script defer>
+    let utteranceInstance
+    function sayQuestion(utterance) {
+        utteranceInstance = new SpeechSynthesisUtterance(utterance);
+        utteranceInstance.lang = 'zh-Chinese'
+        utteranceInstance.rate = 4;
+        speechSynthesis.speak(utteranceInstance)
+    }
+    function cancelSpeech() {
+        speechSynthesis.cancel()
+    }
+    function refreshQuestion() {
+        cancelSpeech()
+        question_el = document.getElementById('question')
+        c_q = questions[Math.floor(Math.random() * questions.length)]
+        question_text = `江山娇，${c_q.sentence}`
+        sayQuestion(question_text)
+        if (!question_text.endsWith('?')) {
+            question_text = question_text.endsWith('。') ? question_text.replace(/。/g, '') : question_text
+            console.log('true')
+            question_text += '？'
+        }
+        author_tag = c_q.author
+        question.innerText = question_text
+    }
+
+    function init() {
+        refreshQuestion()
+
+        window.addEventListener('click', () => {
+            refreshQuestion()
+        })
+
+    }
+    init()
+
+</script>
+
+</html>
